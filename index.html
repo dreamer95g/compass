@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Financial Compass</title>
+  <link rel="stylesheet" href="https://cdn.tailwindcss.com">
+
+</head>
+<body class="bg-gray-100 text-gray-800 font-sans">
+  <header class="bg-white shadow-sm py-4">
+    <div class="container mx-auto">
+      <h1 class="text-2xl font-bold text-center">Financial Compass</h1>
+    </div>
+  </header>
+
+  <main class="container mx-auto py-12">
+    <section class="mb-8">
+      <h2 class="text-xl font-bold mb-4">Calculadora de inversiones</h2>
+      <form action="#">
+        <div class="flex flex-wrap -mx-2">
+          <div class="w-full md:w-1/2 px-2 mb-6 md:mb-0">
+            <label for="inversion" class="block mb-2 text-sm font-medium">Inversión inicial</label>
+            <input type="number" id="inversion" name="inversion" class="shadow-sm border border-gray-300 rounded w-full py-2 px-3 text-sm" placeholder="Introduce la cantidad">
+          </div>
+          <div class="w-full md:w-1/2 px-2 mb-6 md:mb-0">
+            <label for="tasa" class="block mb-2 text-sm font-medium">Tasa de interés anual</label>
+            <input type="number" id="tasa" name="tasa" class="shadow-sm border border-gray-300 rounded w-full py-2 px-3 text-sm" placeholder="Introduce el porcentaje">
+          </div>
+          <div class="w-full md:w-12 px-2 mb-6 md:mb-0">
+            <label for="tiempo" class="block mb-2 text-sm font-medium">Tiempo (años)</label>
+            <input type="number" id="tiempo" name="tiempo" class="shadow-sm border border-gray-300 rounded w-full py-2 px-3 text-sm" placeholder="Introduce el número de años">
+          </div>
+        </div>
+        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4">Calcular</button>
+      </form>
+    </section>
+
+    <section>
+      <h2 class="text-xl font-bold mb-4">Resultados</h2>
+      <div class="bg-white shadow-sm rounded p-4">
+        <p>Valor futuro: <span id="valor-futuro"></span></p>
+        <p>Ganancia total: <span id="ganancia-total"></span></p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="bg-white shadow-sm py-4">
+    <div class="container mx-auto">
+      <p class="text-center text-sm">Brújula Financiera - 2023</p>
+    </div>
+  </footer>
+
+  <script >
+
+
+const inversionInput = document.getElementById('inversion');
+const tasaInput = document.getElementById('tasa');
+const tiempoInput = document.getElementById('tiempo');
+const valorFuturoEl = document.getElementById('valor-futuro');
+const gananciaTotalEl = document.getElementById('ganancia-total');
+
+function calcular() {
+  const inversion = parseFloat(inversionInput.value);
+  const tasa = parseFloat(tasaInput.value) / 100;
+  const tiempo = parseFloat(tiempoInput.value);
+
+  const valorFuturo = inversion * Math.pow((1 + tasa), tiempo);
+  const gananciaTotal = valorFuturo - inversion;
+
+  valorFuturoEl.textContent = valorFuturo.toFixed(2);
+  gananciaTotalEl.textContent = gananciaTotal;
+  </script>
+</body>
+
+
+
