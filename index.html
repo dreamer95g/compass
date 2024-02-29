@@ -1,77 +1,153 @@
 <!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Financial Compass</title>
-  <link rel="stylesheet" href="https://cdn.tailwindcss.com">
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Trading Compass</title>
+    <link rel="stylesheet" type="text/css" href="./assets/styles/loading.css" />
+  </head>
 
-</head>
-<body class="bg-gray-100 text-gray-800 font-sans">
-  <header class="bg-white shadow-sm py-4">
-    <div class="container mx-auto">
-      <h1 class="text-2xl font-bold text-center">Financial Compass</h1>
-    </div>
-  </header>
+  <body>
+    <br />
+ 
+    <div id="main" class="container">
+      <div class="content-center">
+        <h3 class="text-3xl text-center">Trading Leverage Calculator</h3>
+        <hr class="my-2 mx-auto w-1/2" />
+        <form role="form" class="content-center text-center">
+          <div class="mx-auto p-6 content-center" v-if="!loading">
 
-  <main class="container mx-auto py-12">
-    <section class="mb-8">
-      <h2 class="text-xl font-bold mb-4">Calculadora de inversiones</h2>
-      <form action="#">
-        <div class="flex flex-wrap -mx-2">
-          <div class="w-full md:w-1/2 px-2 mb-6 md:mb-0">
-            <label for="inversion" class="block mb-2 text-sm font-medium">Inversión inicial</label>
-            <input type="number" id="inversion" name="inversion" class="shadow-sm border border-gray-300 rounded w-full py-2 px-3 text-sm" placeholder="Introduce la cantidad">
-          </div>
-          <div class="w-full md:w-1/2 px-2 mb-6 md:mb-0">
-            <label for="tasa" class="block mb-2 text-sm font-medium">Tasa de interés anual</label>
-            <input type="number" id="tasa" name="tasa" class="shadow-sm border border-gray-300 rounded w-full py-2 px-3 text-sm" placeholder="Introduce el porcentaje">
-          </div>
-          <div class="w-full md:w-12 px-2 mb-6 md:mb-0">
-            <label for="tiempo" class="block mb-2 text-sm font-medium">Tiempo (años)</label>
-            <input type="number" id="tiempo" name="tiempo" class="shadow-sm border border-gray-300 rounded w-full py-2 px-3 text-sm" placeholder="Introduce el número de años">
-          </div>
-        </div>
-        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4">Calcular</button>
-      </form>
-    </section>
+            <label class="font-semibold my-4">Total Amount $:</label>
+            <input
+              v-model="recipe.total"
+              placeholder=""
+              type="number"
+              @keyup.enter="validate()"
+              @change="hideResult()"
+              class="content-center mx-auto block w-24 px-4 py-2 mt-1 text-gray-700 bg-gray-100 border rounded-full dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-indigo-500 dark:focus:border-blue-500 focus:outline-none focus:ring"
+            /><br />
+            
 
-    <section>
-      <h2 class="text-xl font-bold mb-4">Resultados</h2>
-      <div class="bg-white shadow-sm rounded p-4">
-        <p>Valor futuro: <span id="valor-futuro"></span></p>
-        <p>Ganancia total: <span id="ganancia-total"></span></p>
+            <label class="font-semibold my-4">Margin $:</label>
+            <input
+            v-model="recipe.margin"
+            placeholder=""
+            type="number"
+            @keyup.enter="validate()"
+            @change="hideResult()"
+            class="content-center mx-auto block w-24 px-4 py-2 mt-1 text-gray-700 bg-gray-100 border rounded-full dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-indigo-500 dark:focus:border-blue-500 focus:outline-none focus:ring"
+          /><br />
+
+          <label class="font-semibold my-4">SL Percent %:</label>
+          <input
+          v-model="recipe.slpercent"
+          placeholder=""
+          type="number"
+          @keyup.enter="validate()"
+          @change="hideResult()"
+          class="content-center mx-auto block w-24 px-4 py-2 mt-1 text-gray-700 bg-gray-100 border rounded-full dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-indigo-500 dark:focus:border-blue-500 focus:outline-none focus:ring"
+        /><br />
+        <hr class="my-2 mx-auto w-1/2" />
+            <span
+              class="cursor-pointer my-6 content-center bg-gradient-to-r from-green-600 to-green-500 flex w-24 mx-auto px-3 py-2 rounded-full border border-gray-300 font-medium tracking-wide capitalize transition-colors duration-200 transform bg-transparent focus:outline-none hover:bg-blue-400 text-white"
+              @click="validate()"
+              v-if="!showresult"
+              >Calculate</span
+            >
+          </div>
+
+          <div v-if="showresult" class="content-center">
+            <!-- <hr class="my-2 mx-auto w-1/2" /> -->
+            <h3 class="text-2xl text-center">1% of the account balance: {{onepercent}}</h3>
+            <h3 class="text-2xl text-center">The recommended leverage is: x{{leverage}}</h3>
+            <h3 class="text-2xl text-center">The total volume of the trade is: {{volume}}</h3>
+            <hr class="my-6 mx-auto w-1/2" />
+          </div>
+
+          <div v-if="loading">
+            <div class="sk-three-bounce" id="loading">
+              <div class="sk-child sk-bounce1"></div>
+              <div class="sk-child sk-bounce2"></div>
+              <div class="sk-child sk-bounce3"></div>
+            </div>
+          </div>
+        </form>
+        <br />
       </div>
-    </section>
-  </main>
-
-  <footer class="bg-white shadow-sm py-4">
-    <div class="container mx-auto">
-      <p class="text-center text-sm">Brújula Financiera - 2023</p>
     </div>
-  </footer>
 
-  <script >
+    <script src="./assets/scripts/vue.js"></script>
+    <script src="./assets/scripts/axios.min.js"></script>
+    <script src="./assets/scripts/tailwind.js"></script>
+
+    <script type="text/javascript">
+      new Vue({
+        el: "#main",
+
+        data: {
+          recipe: {
+            total: "",
+            margin: "",
+            slpercent: "",
+          },
+          showresult: false,
+          loading: false,
+          leverage: "",
+          onepercent: "",
+          volume: "",
+        },
+
+        methods: {
+          //VALIDAR LOS CAMPOS
+          validate: function () {
+            if (this.recipe.total !== "" && this.recipe.margin !== "" && this.recipe.slpercent !== "") {
+              
+              this.calculate(this.recipe.total, this.recipe.margin, this.recipe.slpercent);
+            
+            } else {
+              alert(" Fill the inputs ");
+            }
+          },
+
+          hideResult: function (){
+           this.showresult=false;
+          },
+
+           calculate: function (total, margin, slpercent) {
+            // this.loading = true;
+           
+            // setTimeout(function() {
+              const onep = total * 0.01;
+
+             const totalslpercent = Math.round(onep/(slpercent/100));
+
+             this.volume = totalslpercent;
+
+             const lev = Math.ceil(totalslpercent/margin);
+
+             this.leverage = (lev);
+             this.onepercent = onep.toFixed(2);
+
+            
+
+            //  console.log( totalslpercent);
+            //  console.log("leverage" + this.leverage);
+            //  console.log("1% " + this.onepercent);
+            //  console.log("showresult" + this.loading);
+
+             this.loading = false;
+             this.showresult = true;
+            
+            // }, 3000);
 
 
-const inversionInput = document.getElementById('inversion');
-const tasaInput = document.getElementById('tasa');
-const tiempoInput = document.getElementById('tiempo');
-const valorFuturoEl = document.getElementById('valor-futuro');
-const gananciaTotalEl = document.getElementById('ganancia-total');
-
-function calcular() {
-  const inversion = parseFloat(inversionInput.value);
-  const tasa = parseFloat(tasaInput.value) / 100;
-  const tiempo = parseFloat(tiempoInput.value);
-
-  const valorFuturo = inversion * Math.pow((1 + tasa), tiempo);
-  const gananciaTotal = valorFuturo - inversion;
-
-  valorFuturoEl.textContent = valorFuturo.toFixed(2);
-  gananciaTotalEl.textContent = gananciaTotal;
-  </script>
-</body>
+          },
+          
+       
+        },
 
 
-
+      });
+    </script>
+  </body>
+</html>
